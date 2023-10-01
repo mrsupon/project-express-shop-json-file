@@ -1,0 +1,30 @@
+<%- include('../../layouts/head.ejs') %>
+    <link rel="stylesheet" href="/css/forms.css">
+    <link rel="stylesheet" href="/css/product.css">
+</head>
+
+<body>
+    <%- include('../../layouts/navigation.ejs') %>
+    <main >
+        <article class="center">
+            <header class="card__header">
+                <h1 class="product__title"><%= prods.title %></h1>
+            <hr/>                
+            </header>
+
+            <div class="card__image">
+                <img src=<%= prods.imageUrl %> alt="<%= prods.title %>">
+            </div>
+            <div class="card__content">
+                <h2 class="product__price">$<%= prods.price %></h2>
+                <p class="product__description"><%= prods.description %></p>
+            </div>
+            <div class="card__actions">
+                <form class="inline" action="/shops/carts" method="post" >
+                    <input type="hidden" name="productId" value="<%= prods.id %>" />
+                    <button class="btn" type="submit">Add to Cart</button>                                
+                </form>
+            </div>
+        </article>
+    </main>
+    <%- include('../../layouts/end.ejs') %>
