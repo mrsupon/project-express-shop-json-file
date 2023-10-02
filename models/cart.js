@@ -62,26 +62,7 @@ class Cart{
         }
         joinedCart.totalPrice = sum; 
         return joinedCart;
-        // const joinedCart = Cart.data;
-        // let sum = 0.0; 
-        // if(Cart.data.products.length > 0){
-        //     joinedCart.products = Cart.data.products.map((product, index)=>{
-        //         const foundProduct = Product.findById(product.id) ;
-        //         if(foundProduct){
-        //             let total = product.qty*foundProduct.price;
-        //             sum += total;
-        //             return {...product, title:foundProduct.title, price:foundProduct.price, total:total};                 
-        //         }
-        //         else{
-        //             return  {id:product.id, qty:0, title:'out of stock', price:0.0, total:0.0}                  
-        //         }
-        //     });
-        // }
-        // joinedCart.totalPrice = sum; 
-        // return joinedCart;
     }
-
-
 }
 
 export default Cart ;
