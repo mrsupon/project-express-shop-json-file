@@ -14,6 +14,7 @@ class CartController{
     }
 
     static store(req, res){
+        const cart = Cart.find() ;
         const productId = req.body.productId;  
         const productPrice = (Product.findById(productId)).price; 
         const newProduct = {id:productId, qty:1};
@@ -21,21 +22,20 @@ class CartController{
         const foundProduct = Cart.findProductById(productId);   
         if(foundProduct){
             const index = Cart.findProductIndex(productId); 
-            Cart.data.products[index].qty += 1 ;
+            cart.products[index].qty += 1 ;
         }
         else{
-            Cart.data.products = [...Cart.data.products, newProduct];
+            cart.products = [...cart.products, newProduct];
         }
-        Cart.data.totalPrice += parseFloat(productPrice);
-        +(parseFloat(Cart.data.totalPrice).toFixed(2));
-        Cart.save();
+        cart.totalPrice += parseFloat(productPrice);
+        +(parseFloat(cart.totalPrice).toFixed(2));
+        Cart.save(cart);
 
         res.redirect('/shops/carts');
     } 
 
     static destroy(req, res){ 
         Cart.deleteProductById(req.params.id);
-        Cart.save();
         res.redirect("/shops/carts");
     } 
 }

@@ -1,5 +1,6 @@
 import { dirname } from "path"; 
 import { fileURLToPath } from "url";
+import path from "path";
 
 class Utility{
     static getUID(){
@@ -11,9 +12,8 @@ class Utility{
         return String(fixedNumber).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
     
-
-    static getDirName( filePath ){
-        return dirname(fileURLToPath(import.meta.url))+filePath ;
+    static getPath( loaction ){
+        return path.join(process.cwd(), 'database/cart.json');
     }
 }
 

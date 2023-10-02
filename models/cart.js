@@ -1,70 +1,84 @@
 import fs from "fs";
 import Product from "./product.js";
+import Utility from "../utils/utility.js";
 
 class Cart{
-    static data = Cart.find() ;
-    constructor(products, totalPrice) {
+    static filePath = Utility.getPath('database/cart.json');
+    static data = this.find() ;
+    
+    constructor(products, totalPrice) { 
         this.products = products ;
-        this.totalPrice = parseFloat(totalPrice);
+        this.totalPrice = parseFloat(totalPrice); 
     }
 
-    static save(){   
-        fs.writeFile((new URL('../database/cart.json', import.meta.url)) , JSON.stringify(Cart.data), (error)=>{
-            if(!error)
-                console.log("Save File Sucessfully.");
-            else
-                console.log(error); 
-        });
+    static save( data ){  
+        fs.writeFile( this.filePath , JSON.stringify(data), (err)=>{ if(err) console.log(err) });
     }
 
-    static find(){
-        fs.readFile(new URL('../database/cart.json', import.meta.url),(error, foundData)=>{
-            if(!error){ 
-               Cart.data = JSON.parse(foundData);               
+    static find(){  //console.log(path.join(process.cwd(), 'database/cart.json') );
+        fs.open( this.filePath ,'r+', (err, fileDescriptor )=>{
+            if(err){ 
+                this.data = {products:[], totalPrice:0};
+                this.save(this.data);
             }
-            else{   
-                console.log("Data is empty.")
-                Cart.data = {products:[], totalPrice:0};
-                fs.writeFile((new URL('../database/cart.json', import.meta.url)) , JSON.stringify(Cart.data), (error)=>{
-                    if(!error)
-                    console.log("Save File Sucessfully.");
-                else
-                    console.log(error);
-                });
+            else{
+                fs.readFile( this.filePath ,(err, foundData)=>{ if(!err) this.data = JSON.parse(foundData); });
             }
         });
-        return Cart.data ; 
+        return this.data ;   
     }
 
     static findProductById(id){ 
-        return Cart.data.products.find(product =>(product.id === id));
+        return this.data.products.find(product =>(product.id === id));
     }
 
     static findProductIndex(id){
-        return Cart.data.products.findIndex(product =>(product.id === id))  ;
+        return this.data.products.findIndex(product =>(product.id === id))  ;
     }
 
     static deleteProductById(id){
-        const index = Cart.findProductIndex(id);
-        Cart.data.products.splice(index, 1) ;
+        const productPrice = Product.findById(id).price; 
+        const index = this.findProductIndex(id);
+        this.data.totalPrice -= (this.data.products[index].qty * productPrice) ;        
+        this.data.products.splice(index, 1) ;
+        this.save(this.data);
     }
 
     static joinWithProduct( ){ 
-        const joinedCart = Cart.data ; 
-        let sum = 0.0;
-        joinedCart.products = Cart.data.products.map((product, index)=>{
-            const foundProduct = Product.findById(product.id) ;
-            if(foundProduct){
-                let total = product.qty*foundProduct.price;
-                sum += total;
-                return {...product, title:foundProduct.title, price:foundProduct.price, total:total};                 
-            }
-            else{
-                return  {id:product.id, qty:0, title:'out of stock', price:0.0, total:0.0}                  
-            }
-        });
-        joinedCart.totalPrice = sum; console.log(joinedCart);
+        const joinedCart = {...this.data};//clone Object
+        let sum = 0.0; 
+        if(joinedCart.products.length > 0){
+            joinedCart.products = joinedCart.products.map((product, index)=>{
+                const foundProduct = Product.findById(product.id) ;
+                if(foundProduct){
+                    let total = product.qty*foundProduct.price;
+                    sum += total;
+                    return {...product, title:foundProduct.title, price:foundProduct.price, total:total};                 
+                }
+                else{
+                    return  {id:product.id, qty:0, title:'out of stock', price:0.0, total:0.0}                  
+                }
+            });
+        }
+        joinedCart.totalPrice = sum; 
         return joinedCart;
+        // const joinedCart = Cart.data;
+        // let sum = 0.0; 
+        // if(Cart.data.products.length > 0){
+        //     joinedCart.products = Cart.data.products.map((product, index)=>{
+        //         const foundProduct = Product.findById(product.id) ;
+        //         if(foundProduct){
+        //             let total = product.qty*foundProduct.price;
+        //             sum += total;
+        //             return {...product, title:foundProduct.title, price:foundProduct.price, total:total};                 
+        //         }
+        //         else{
+        //             return  {id:product.id, qty:0, title:'out of stock', price:0.0, total:0.0}                  
+        //         }
+        //     });
+        // }
+        // joinedCart.totalPrice = sum; 
+        // return joinedCart;
     }
 
 

@@ -14,7 +14,7 @@ class Product{
         Product.data.push(this); 
         fs.writeFile((new URL('../database/products.json', import.meta.url)) , JSON.stringify(Product.data), (error)=>{
         if(!error)
-                console.log("Save File Sucessfully.");
+                console.log("Save products.json Sucessfully.");
             else
                 console.log(error);
         });
@@ -25,11 +25,11 @@ class Product{
                Product.data = JSON.parse(foundData);               
             }
             else{   
-                console.log("Data is empty.")
+                console.log("Products is empty.")
                 Product.data = [];
                 fs.writeFile((new URL('../database/products.json', import.meta.url)) , JSON.stringify(Product.data), (error)=>{
                     if(!error)
-                    console.log("Save File Sucessfully."); 
+                    console.log("Save products.json Sucessfully."); 
                 else
                     console.log(error);
                 });
@@ -62,7 +62,4 @@ class Product{
     
 }
 
-const products = Product.data;
-
 export default Product;
-export {products};
