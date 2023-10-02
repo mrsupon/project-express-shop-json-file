@@ -3,11 +3,15 @@ import Product from "../../models/product.js"
 class ProductController{
 
     static index(req, res){
-        res.render('admins/products/index.ejs', {
-            prods: Product.find() ,
-            pageTitle: 'Products by admin',
+        Product.find()
+        .then( ([rows, schema]) => {
+            res.render('admins/products/index.ejs', {
+            prods: rows ,
+            pageTitle: 'Products',
             path: '/admins/products'
-        });
+            });
+        })
+        .catch( err=>console.log(err) );
     }
 
     static create(req, res){
@@ -23,8 +27,12 @@ class ProductController{
         const description = req.body.description;
         const price = parseFloat(req.body.price); 
         const newProduct = new Product(title, imageUrl, description, price);
-        newProduct.save();
-        res.redirect('/admins/products');
+        newProduct.save()
+        .then(()=>{
+            res.redirect('/admins/products');
+        })
+        .catch( err=>console.log(err) );
+
     }    
 
     static edit(req, res){

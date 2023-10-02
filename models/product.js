@@ -1,5 +1,6 @@
 import fs from "fs";
 import Utility from "../utils/utility.js";
+import db from "../database/database.js"
 
 class Product{
     static data = this.find();
@@ -11,35 +12,17 @@ class Product{
         this.price = price;
     }
     save(){ 
-        Product.data.push(this); 
-        fs.writeFile((new URL('../database/products.json', import.meta.url)) , JSON.stringify(Product.data), (error)=>{
-        if(!error)
-                console.log("Save products.json Sucessfully.");
-            else
-                console.log(error);
-        });
+        return  db.execute(
+                    'insert into products (title, description, imageUrl, price) values(?,?,?,?)',
+                    [this.title, this.description, this.imageUrl, this.price]
+                );
     }
     static find(){
-        fs.readFile(new URL('../database/products.json', import.meta.url),(error, foundData)=>{
-            if(!error){ 
-               Product.data = JSON.parse(foundData);               
-            }
-            else{   
-                console.log("Products is empty.")
-                Product.data = [];
-                fs.writeFile((new URL('../database/products.json', import.meta.url)) , JSON.stringify(Product.data), (error)=>{
-                    if(!error)
-                    console.log("Save products.json Sucessfully."); 
-                else
-                    console.log(error);
-                });
-            }
-        });
-        return Product.data ; 
+        return db.execute('select * from products');
     }
 
     static findById(id){
-        return Product.data.find(product =>(product.id === id));
+        return  db.execute('select * from products where products.id = ?',[id]);
     }
 
     static findByIdex(id){

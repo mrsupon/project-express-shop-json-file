@@ -1,8 +1,8 @@
-import express from "express";
-import { dirname } from "path"; 
-import { fileURLToPath } from "url";
-import Route from "./routes/web.js";
-import methodOverride from "method-override";
+import express from "express"
+import { dirname } from "path" 
+import { fileURLToPath } from "url"
+import Route from "./routes/web.js"
+import methodOverride from "method-override"
 
 const app = express();
 const port = 3000;

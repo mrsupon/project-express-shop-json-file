@@ -1,6 +1,5 @@
 import Product from "../../models/product.js";
 import Cart from "../../models/cart.js";
-import Utility from "../../utils/utility.js";
 
 class CartController{
 

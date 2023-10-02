@@ -16,7 +16,7 @@
                 <img src=<%= prods.imageUrl %> alt="<%= prods.title %>">
             </div>
             <div class="card__content">
-                <h2 class="product__price">$<%= prods.price %></h2>
+                <h2 class="product__price">$<%= parseFloat(prods.price).toFixed(2) %></h2>
                 <p class="product__description"><%= prods.description %></p>
             </div>
             <div class="card__actions">

@@ -17,4 +17,7 @@ class Utility{
     }
 }
 
+const $ = Utility.currencyFormat;
+
 export default Utility;
+export {$};

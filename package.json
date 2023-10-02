@@ -1,5 +1,5 @@
 {
-  "name": "project-express-shop-json-file",
+  "name": "project-express-shop-mysql",
   "version": "1.0.0",
   "description": "project-express-json-file",
   "main": "app.js",
@@ -15,9 +15,11 @@
     "nodemon": "^1.18.3"
   },
   "dependencies": {
+    "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
     "express": "^4.16.3",
     "method-override": "^3.0.0",
+    "mysql2": "^3.6.1",
     "uuid": "^9.0.1"
   }
 }

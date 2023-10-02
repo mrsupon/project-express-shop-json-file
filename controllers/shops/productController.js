@@ -3,20 +3,28 @@ import Product from "../../models/product.js"
 class ProductController{
 
     static index(req, res){
-        res.render('shops/products/index.ejs', {
-            prods: Product.find() ,
+        Product.find()
+        .then( ([rows, schema]) => {
+            res.render('shops/products/index.ejs', {
+            prods: rows ,
             pageTitle: 'Products in shop',
             path: '/shops/products'
         });
+        })
+        .catch( err=>console.log(err) );
     }
 
     static show(req, res){
         let id = req.params.id ; 
-        res.render('shops/products/show.ejs', {
-            prods: Product.findById(id) ,
-            pageTitle: 'Product Details',
-            path: ''
-        });
+        Product.findById(id)
+        .then(([rows, schema])=>{ 
+            res.render('shops/products/show.ejs', {
+                prods: rows[0] ,
+                pageTitle: 'Product Details',
+                path: ''
+            });
+        })
+        .catch( err=>console.log(err) );
     }
 
 }
